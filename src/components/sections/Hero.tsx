@@ -37,7 +37,7 @@ export const Hero = () => {
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               {t({
                 en: 'Asad Hossain Sirazi',
-                bn: 'আসাদ হোসাইন সিরাজী',
+                bn: 'আছআদ হোছাইন সিরাজী',
                 ar: 'أسعد حسين سراجي',
               })}
             </h1>
