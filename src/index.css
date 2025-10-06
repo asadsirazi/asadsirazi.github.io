@@ -7,14 +7,7 @@ All colors MUST be HSL.
 */
 
 /* SolaimanLipi Font */
-@font-face {
-  font-family: 'SolaimanLipi';
-  src: url('https://cdn.jsdelivr.net/gh/fonts-bangla/solaimanlipi@master/webfonts/SolaimanLipi.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/fonts-bangla/solaimanlipi@master/webfonts/SolaimanLipi.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+@import url('https://fonts.maateen.me/solaimanlipi/font.css');
 
 @layer base {
   :root {
