@@ -16,3 +16,20 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+
+
+export default {
+  plugins: [],
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'sitemap.xml') {
+            return 'sitemap.xml';
+          }
+          return assetInfo.name;
+        }
+      }
+    }
+  }
+}
