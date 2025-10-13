@@ -85,10 +85,10 @@ export const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 px-4">
+    <section id="contact" className="py-20 px-4" aria-labelledby="contact-heading">
       <div className="container mx-auto max-w-6xl z-10 relative">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h2 id="contact-heading" className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {t({ en: 'Get In Touch', bn: 'যোগাযোগ করুন', ar: 'تواصل معي' })}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />

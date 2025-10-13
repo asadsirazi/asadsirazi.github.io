@@ -10,16 +10,16 @@ export const Gallery = () => {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   const images = [
-    { src: gallery1, alt: 'Asad working at desk' },
-    { src: gallery2, alt: 'Professional workspace' },
-    { src: gallery3, alt: 'IT workspace setup' },
+    { src: gallery1, alt: 'Asad Hossain Sirazi working at computer desk - IT professional workspace' },
+    { src: gallery2, alt: 'Professional IT workspace setup with modern technology equipment' },
+    { src: gallery3, alt: 'IT specialist workspace showing web development environment' },
   ];
 
   return (
-    <section id="gallery" className="py-20 px-4">
+    <section id="gallery" className="py-20 px-4" aria-labelledby="gallery-heading">
       <div className="container mx-auto max-w-6xl z-10 relative">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h2 id="gallery-heading" className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {t({ en: 'Gallery', bn: 'গ্যালারি', ar: 'المعرض' })}
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
@@ -65,7 +65,7 @@ export const Gallery = () => {
             </button>
             <img
               src={lightboxImage}
-              alt="Gallery image"
+              alt="Asad Hossain Sirazi professional workspace - enlarged view"
               className="max-w-full max-h-[90vh] object-contain glass-card"
               onClick={(e) => e.stopPropagation()}
             />

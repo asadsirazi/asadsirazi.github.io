@@ -20,15 +20,17 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 pb-10 px-4">
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 pb-10 px-4" role="banner" aria-label="Introduction">
       <div className="container mx-auto max-w-6xl z-10">
-        <div className="glass-card text-center space-y-8 animate-fade-in">
+        <article className="glass-card text-center space-y-8 animate-fade-in">
           <div className="flex justify-center">
             <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-primary/30 shadow-glow">
               <img
                 src={profileImage}
-                alt="Asad Hossain Sirazi"
+                alt="Asad Hossain Sirazi - IT Support Specialist and Web Developer from Cox's Bazar, Bangladesh"
                 className="w-full h-full object-cover"
+                width="160"
+                height="160"
               />
             </div>
           </div>
@@ -105,7 +107,7 @@ export const Hero = () => {
               })}
             </p>
           </div>
-        </div>
+        </article>
       </div>
     </section>
   );
