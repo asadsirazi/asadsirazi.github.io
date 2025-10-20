@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
@@ -64,7 +65,8 @@ export const Header = () => {
           ))}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-3">
+          <ThemeToggle />
           <LanguageSwitcher />
         </div>
 
@@ -92,7 +94,8 @@ export const Header = () => {
                 {t(item.label)}
               </button>
             ))}
-            <div className="pt-4 border-t border-border">
+            <div className="pt-4 border-t border-border flex items-center gap-3">
+              <ThemeToggle />
               <LanguageSwitcher />
             </div>
           </div>

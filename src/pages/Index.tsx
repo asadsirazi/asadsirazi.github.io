@@ -1,5 +1,6 @@
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { ParticlesBackground } from '@/components/ParticlesBackground';
+import { AuroraBackground } from '@/components/AuroraBackground';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/sections/Hero';
 import { About } from '@/components/sections/About';
@@ -181,6 +182,7 @@ const Index = () => {
   return (
     <LanguageProvider>
       <div className="relative min-h-screen">
+        <AuroraBackground />
         <ParticlesBackground />
         <Header />
         <main role="main" aria-label="Main content">
