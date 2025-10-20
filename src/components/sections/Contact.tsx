@@ -188,6 +188,25 @@ export const Contact = () => {
             </form>
           </div>
         </div>
+
+        {/* Google Map Location */}
+        <div className="mt-12">
+          <h3 className="text-xl font-semibold mb-6 text-center">
+            {t({ en: 'My Location', bn: 'আমার অবস্থান', ar: 'موقعي' })}
+          </h3>
+          <div className="glass-card p-0 overflow-hidden">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d680.5520425103073!2d91.8765535283763!3d21.709066998752064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30adad006577cce9%3A0x38d21ffc0dfd6718!2sSiraz%20Villa%20(Asad%20Sirazi&#39;s%20House)!5e1!3m2!1sen!2sbd!4v1760925209244!5m2!1sen!2sbd" 
+              width="100%" 
+              height="450" 
+              style={{ border: 0 }} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title={t({ en: 'Location Map', bn: 'অবস্থান মানচিত্র', ar: 'خريطة الموقع' })}
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

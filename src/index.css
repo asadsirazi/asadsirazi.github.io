@@ -103,6 +103,12 @@ All colors MUST be HSL.
     @apply glass rounded-2xl p-6 transition-all duration-300;
   }
   
+  @media (max-width: 768px) {
+    .glass-card {
+      @apply px-4;
+    }
+  }
+  
   .glass-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-glass), var(--shadow-glow);
