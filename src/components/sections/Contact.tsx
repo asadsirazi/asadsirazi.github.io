@@ -6,207 +6,90 @@ import { Mail, Phone, MessageCircle, Send, Facebook } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import { useContactMethods, useSiteSettings } from '@/hooks/usePortfolioData';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const iconMap: Record<string, any> = { MessageCircle, Send, Phone, Mail, Facebook };
 
 export const Contact = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const { data: methods, isLoading: methodsLoading } = useContactMethods();
+  const { data: settings, isLoading: settingsLoading } = useSiteSettings();
+
+  const locationData = settings?.location || {};
+  const socialLinks = settings?.social_links || {};
 
   const contactSchema = z.object({
-    name: z.string().min(2, 'Name must be at least 2 characters').max(100),
-    email: z.string().email('Invalid email address').max(255),
-    message: z.string().min(10, 'Message must be at least 10 characters').max(1000),
+    name: z.string().min(2).max(100),
+    email: z.string().email().max(255),
+    message: z.string().min(10).max(1000),
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     try {
       contactSchema.parse(formData);
-      
       const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
       const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
-      window.open(`mailto:asadsirazi@gmail.com?subject=${subject}&body=${body}`, '_blank');
-      
-      toast({
-        title: t({ en: 'Opening email client...', bn: 'ইমেল ক্লায়েন্ট খোলা হচ্ছে...', ar: 'فتح عميل البريد الإلكتروني...' }),
-        description: t({ en: 'Your message will be composed in your default email app', bn: 'আপনার বার্তা আপনার ডিফল্ট ইমেল অ্যাপে তৈরি হবে', ar: 'سيتم إنشاء رسالتك في تطبيق البريد الإلكتروني الافتراضي الخاص بك' }),
-      });
-      
+      window.open(`mailto:${socialLinks.email || 'asadsirazi@gmail.com'}?subject=${subject}&body=${body}`, '_blank');
+      toast({ title: t({ en: 'Opening email client...', bn: 'ইমেল ক্লায়েন্ট খোলা হচ্ছে...', ar: 'فتح عميل البريد الإلكتروني...' }) });
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast({
-          title: t({ en: 'Validation Error', bn: 'যাচাইকরণ ত্রুটি', ar: 'خطأ في التحقق' }),
-          description: error.errors[0].message,
-          variant: 'destructive',
-        });
-      }
+      if (error instanceof z.ZodError) toast({ title: t({ en: 'Validation Error', bn: 'যাচাইকরণ ত্রুটি', ar: 'خطأ في التحقق' }), description: error.errors[0].message, variant: 'destructive' });
     }
   };
 
-  const contactMethods = [
-    {
-      icon: <MessageCircle className="h-5 w-5" />,
-      label: 'WhatsApp',
-      value: '+880 1832-591765',
-      link: 'https://wa.me/8801832591765',
-      color: 'from-green-400 to-green-600',
-    },
-    {
-      icon: <Send className="h-5 w-5" />,
-      label: 'Telegram',
-      value: '+880 1832-591765',
-      link: 'tg://resolve?phone=+8801832591765',
-      color: 'from-blue-400 to-blue-600',
-    },
-    {
-      icon: <Phone className="h-5 w-5" />,
-      label: 'Imo / Call',
-      value: '+880 1832-591765',
-      link: 'tel:+8801832591765',
-      hint: { en: 'Find me on Imo by this number', bn: 'এই নম্বরে Imo-তে আমাকে খুঁজুন', ar: 'ابحث عني على Imo بهذا الرقم' },
-      color: 'from-purple-400 to-purple-600',
-    },
-    {
-      icon: <Mail className="h-5 w-5" />,
-      label: 'Email',
-      value: 'asadsirazi@gmail.com',
-      link: 'mailto:asadsirazi@gmail.com',
-      color: 'from-red-400 to-red-600',
-    },
-    {
-      icon: <Facebook className="h-5 w-5" />,
-      label: 'Facebook',
-      value: 'asadsirazi',
-      link: 'https://facebook.com/asadsirazi',
-      color: 'from-blue-500 to-blue-700',
-    },
-  ];
+  if (methodsLoading || settingsLoading) return <section className="py-20 px-4"><div className="container mx-auto max-w-6xl"><Skeleton className="h-64 w-full" /></div></section>;
 
   return (
     <section id="contact" className="py-20 px-4" aria-labelledby="contact-heading">
       <div className="container mx-auto max-w-6xl z-10 relative">
         <div className="text-center mb-12">
-          <h2 id="contact-heading" className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            {t({ en: 'Get In Touch', bn: 'যোগাযোগ করুন', ar: 'تواصل معي' })}
-          </h2>
+          <h2 id="contact-heading" className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{t({ en: 'Get In Touch', bn: 'যোগাযোগ করুন', ar: 'تواصل معي' })}</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            {t({
-              en: 'Feel free to reach out through any of these channels. I\'m always open to discussing new projects and opportunities.',
-              bn: 'এই চ্যানেলগুলির মাধ্যমে যোগাযোগ করতে দ্বিধা করবেন না। আমি সর্বদা নতুন প্রকল্প এবং সুযোগ নিয়ে আলোচনা করতে আগ্রহী।',
-              ar: 'لا تتردد في التواصل من خلال أي من هذه القنوات. أنا دائمًا منفتح لمناقشة المشاريع والفرص الجديدة.',
-            })}
-          </p>
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-justify">{t({ en: "Feel free to reach out through any of these channels. I'm always open to discussing new projects and opportunities.", bn: 'এই চ্যানেলগুলির মাধ্যমে যোগাযোগ করতে দ্বিধা করবেন না।', ar: 'لا تتردد في التواصل من خلال أي من هذه القنوات.' })}</p>
         </div>
-
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Contact Methods */}
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-6">
-              {t({ en: 'Contact Methods', bn: 'যোগাযোগের মাধ্যম', ar: 'طرق الاتصال' })}
-            </h3>
-            
-            {contactMethods.map((method, index) => (
-              <a
-                key={index}
-                href={method.link}
-                target={method.label === 'Email' ? undefined : '_blank'}
-                rel="noopener noreferrer"
-                className="glass-card hover:shadow-glow transition-all duration-300 block group animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${method.color} flex items-center justify-center text-white flex-shrink-0`}>
-                    {method.icon}
+            <h3 className="text-xl font-semibold mb-6">{t({ en: 'Contact Methods', bn: 'যোগাযোগের মাধ্যম', ar: 'طرق الاتصال' })}</h3>
+            {methods?.map((method, index) => {
+              const IconComp = iconMap[method.icon_name || 'Mail'] || Mail;
+              const hint = language === 'bn' ? method.hint_bn : language === 'ar' ? method.hint_ar : method.hint_en;
+              return (
+                <a key={method.id} href={method.link || '#'} target={method.label === 'Email' ? undefined : '_blank'} rel="noopener noreferrer" className="glass-card hover:shadow-glow transition-all duration-300 block group animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${method.color || 'from-blue-400 to-blue-600'} flex items-center justify-center text-white flex-shrink-0`}><IconComp className="h-5 w-5" /></div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-foreground">{method.label}</p>
+                      <p className="text-sm text-muted-foreground truncate">{method.value}</p>
+                      {hint && <p className="text-xs text-accent mt-1">{hint}</p>}
+                    </div>
+                    <div className="text-primary opacity-0 group-hover:opacity-100 transition-opacity">→</div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground">{method.label}</p>
-                    <p className="text-sm text-muted-foreground truncate">{method.value}</p>
-                    {method.hint && (
-                      <p className="text-xs text-accent mt-1">{t(method.hint)}</p>
-                    )}
-                  </div>
-                  <div className="text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    →
-                  </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
-
-          {/* Contact Form */}
           <div className="glass-card">
-            <h3 className="text-xl font-semibold mb-6">
-              {t({ en: 'Send a Message', bn: 'একটি বার্তা পাঠান', ar: 'أرسل رسالة' })}
-            </h3>
-            
+            <h3 className="text-xl font-semibold mb-6">{t({ en: 'Send a Message', bn: 'একটি বার্তা পাঠান', ar: 'أرسل رسالة' })}</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Input
-                  type="text"
-                  placeholder={t({ en: 'Your Name', bn: 'আপনার নাম', ar: 'اسمك' })}
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="glass border-border/50"
-                  required
-                  maxLength={100}
-                />
-              </div>
-              
-              <div>
-                <Input
-                  type="email"
-                  placeholder={t({ en: 'Your Email', bn: 'আপনার ইমেল', ar: 'بريدك الإلكتروني' })}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="glass border-border/50"
-                  required
-                  maxLength={255}
-                />
-              </div>
-              
-              <div>
-                <Textarea
-                  placeholder={t({ en: 'Your Message', bn: 'আপনার বার্তা', ar: 'رسالتك' })}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="glass border-border/50 min-h-[150px]"
-                  required
-                  maxLength={1000}
-                />
-              </div>
-              
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity"
-              >
-                <Mail className="mr-2 h-4 w-4" />
-                {t({ en: 'Send Message', bn: 'বার্তা পাঠান', ar: 'أرسل الرسالة' })}
-              </Button>
+              <Input type="text" placeholder={t({ en: 'Your Name', bn: 'আপনার নাম', ar: 'اسمك' })} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="glass border-border/50" required maxLength={100} />
+              <Input type="email" placeholder={t({ en: 'Your Email', bn: 'আপনার ইমেল', ar: 'بريدك الإلكتروني' })} value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="glass border-border/50" required maxLength={255} />
+              <Textarea placeholder={t({ en: 'Your Message', bn: 'আপনার বার্তা', ar: 'رسالتك' })} value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="glass border-border/50 min-h-[150px]" required maxLength={1000} />
+              <Button type="submit" className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90"><Mail className="mr-2 h-4 w-4" />{t({ en: 'Send Message', bn: 'বার্তা পাঠান', ar: 'أرسل الرسالة' })}</Button>
             </form>
           </div>
         </div>
-
-        {/* Google Map Location */}
-        <div className="mt-12">
-          <h3 className="text-xl font-semibold mb-6 text-center">
-            {t({ en: 'My Location', bn: 'আমার অবস্থান', ar: 'موقعي' })}
-          </h3>
-          <div className="glass-card p-0 overflow-hidden">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d680.5520425103073!2d91.8765535283763!3d21.709066998752064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30adad006577cce9%3A0x38d21ffc0dfd6718!2sSiraz%20Villa%20(Asad%20Sirazi&#39;s%20House)!5e1!3m2!1sen!2sbd!4v1760925209244!5m2!1sen!2sbd" 
-              width="100%" 
-              height="450" 
-              style={{ border: 0 }} 
-              allowFullScreen 
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-              title={t({ en: 'Location Map', bn: 'অবস্থান মানচিত্র', ar: 'خريطة الموقع' })}
-            />
+        {locationData.maps_embed && (
+          <div className="mt-12">
+            <h3 className="text-xl font-semibold mb-6 text-center">{t({ en: 'My Location', bn: 'আমার অবস্থান', ar: 'موقعي' })}</h3>
+            <div className="glass-card p-0 overflow-hidden">
+              <iframe src={locationData.maps_embed} width="100%" height="450" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={t({ en: 'Location Map', bn: 'অবস্থান মানচিত্র', ar: 'خريطة الموقع' })} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
