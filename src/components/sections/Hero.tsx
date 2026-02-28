@@ -34,7 +34,7 @@ export const Hero = () => {
           </div>
           <div className="space-y-4">
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">{t(name)}</h1>
-            <p className="text-xl md:text-2xl text-secondary font-medium">{t(title)}</p>
+            <p className="text-xl md:text-2xl text-secondary font-medium text-center">{t(title)}</p>
             <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed text-justify">{t(subtitle)}</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
